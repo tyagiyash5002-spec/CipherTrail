@@ -1,0 +1,19 @@
+node_modules/
+dist/
+.npm-cache/
+.env
+*.log
+data/
+.test-runs/
+qa/screenshots/
+*-PRIVATE-keys.json
+.venv-forensics/
+__pycache__/
+
+# Demo media and generated recordings
+demo-video/
+*.mp4
+*.mp3
+*.wav
+*.webm
+qa/screenshots/

@@ -1,0 +1,38 @@
+syntax = "proto3";
+package ciphertrail;
+// Wire-compatible subset of Tendermint v0.34.24 abci/types.proto.
+// Unknown fields are skipped. Validator updates and state sync are not supported.
+message Empty {}
+message Echo { string message = 1; }
+message Exception { string error = 1; }
+message Info { string data = 1; string version = 2; uint64 app_version = 3; int64 last_block_height = 4; bytes last_block_app_hash = 5; }
+message InitChain { string chain_id = 2; bytes app_state_bytes = 5; int64 initial_height = 6; }
+message InitResult { bytes app_hash = 3; }
+message Header { string chain_id = 2; int64 height = 3; }
+message BeginBlock { bytes hash = 1; Header header = 2; }
+message Tx { bytes tx = 1; uint32 type = 2; }
+message EndBlock { int64 height = 1; }
+message Query { bytes data = 1; string path = 2; int64 height = 3; bool prove = 4; }
+message QueryResult { uint32 code = 1; string log = 3; string info = 4; int64 index = 5; bytes key = 6; bytes value = 7; int64 height = 9; string codespace = 10; }
+message Attribute { bytes key = 1; bytes value = 2; bool index = 3; }
+message Event { string type = 1; repeated Attribute attributes = 2; }
+message TxResult { uint32 code = 1; bytes data = 2; string log = 3; string info = 4; int64 gas_wanted = 5; int64 gas_used = 6; repeated Event events = 7; string codespace = 8; }
+message CommitResult { bytes data = 2; int64 retain_height = 3; }
+message SnapshotResult { uint32 result = 1; }
+message Request {
+  oneof value {
+    Echo echo = 1; Empty flush = 2; Empty info = 3; Empty set_option = 4;
+    InitChain init_chain = 5; Query query = 6; BeginBlock begin_block = 7;
+    Tx check_tx = 8; Tx deliver_tx = 9; EndBlock end_block = 10; Empty commit = 11;
+    Empty list_snapshots = 12; Empty offer_snapshot = 13; Empty load_snapshot_chunk = 14; Empty apply_snapshot_chunk = 15;
+  }
+}
+message Response {
+  oneof value {
+    Exception exception = 1; Echo echo = 2; Empty flush = 3; Info info = 4;
+    Empty set_option = 5; InitResult init_chain = 6; QueryResult query = 7;
+    Empty begin_block = 8; TxResult check_tx = 9; TxResult deliver_tx = 10;
+    Empty end_block = 11; CommitResult commit = 12; Empty list_snapshots = 13;
+    SnapshotResult offer_snapshot = 14; Empty load_snapshot_chunk = 15; SnapshotResult apply_snapshot_chunk = 16;
+  }
+}

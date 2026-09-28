@@ -1,0 +1,8 @@
+node_modules
+.npm-cache
+data
+.env
+.test-runs
+qa
+dist
+*-PRIVATE-keys.json

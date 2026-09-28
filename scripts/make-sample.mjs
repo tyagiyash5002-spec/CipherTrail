@@ -1,0 +1,13 @@
+import {PDFDocument,StandardFonts,rgb} from 'pdf-lib';
+import {writeFileSync,mkdirSync} from 'node:fs';
+const pdf=await PDFDocument.create();
+const page=pdf.addPage([595,842]),font=await pdf.embedFont(StandardFonts.Helvetica),bold=await pdf.embedFont(StandardFonts.HelveticaBold);
+page.drawRectangle({x:0,y:720,width:595,height:122,color:rgb(.07,.15,.27)});
+page.drawText('CipherTrail demonstration',{x:45,y:780,size:25,font:bold,color:rgb(1,1,1)});
+page.drawText('SYNTHETIC DOCUMENT - NO SENSITIVE INFORMATION',{x:45,y:750,size:10,font,color:rgb(.7,.8,.95)});
+const lines=['Project briefing: Harbor Exercise','This sample PDF is intended for a three-computer demonstration.','1. The administrator encrypts this document and grants Recipient A access.','2. Recipient B attempts access and receives an access-denied response.','3. Recipient A signs and downloads a uniquely marked copy.','4. The administrator grants Recipient B access to obtain a second copy.','5. Upload either downloaded PDF to investigate its issuance record.','','Copies retain the same visible page content. The structural identifier','and file digest distinguish the original issued copies. Screenshots,','printouts and edited files are outside this demonstration profile.'];
+lines.forEach((text,i)=>page.drawText(text,{x:45,y:665-i*30,size:i===0?18:11,font:i===0?bold:font,color:rgb(.15,.22,.32)}));
+pdf.setTitle('CipherTrail synthetic briefing');
+mkdirSync('samples',{recursive:true});
+writeFileSync('samples/harbor-briefing.pdf',await pdf.save());
+console.log('Created samples/harbor-briefing.pdf');
